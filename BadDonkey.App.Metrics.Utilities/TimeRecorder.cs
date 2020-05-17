@@ -38,7 +38,7 @@ namespace BadDonkey.App.Metrics.Utilities
             var timer = GetTimerInstance(_metricsRoot, _timerOptions, _tags);
 
             _stopwatch.Stop();
-            timer.Record(ConvertElapsedTimeToTimeUnit(), TimeUnit.Milliseconds, _userValue);
+            timer.Record(ConvertElapsedTimeToTimeUnit(), _timeUnit, _userValue);
 
             if (_autoFlush)
             {
