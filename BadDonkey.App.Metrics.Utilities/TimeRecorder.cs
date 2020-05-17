@@ -41,7 +41,11 @@ namespace BadDonkey.App.Metrics.Utilities
             timer.Record(ConvertElapsedTimeToTimeUnit(), TimeUnit.Milliseconds, _userValue);
 
             if (_autoFlush)
+            {
                 await Task.WhenAll(_metricsRoot.ReportRunner.RunAllAsync());
+                timer.Reset();
+                _metricsRoot.Manage.ShutdownContext(_timerOptions.Context);
+            }
         }
 
         private long ConvertElapsedTimeToTimeUnit()
@@ -52,13 +56,13 @@ namespace BadDonkey.App.Metrics.Utilities
                 case TimeUnit.Milliseconds:
                     return (long)_stopwatch.Elapsed.TotalMilliseconds;
                 case TimeUnit.Seconds:
-                    return _stopwatch.Elapsed.Seconds;
+                    return (long)_stopwatch.Elapsed.TotalSeconds;
                 case TimeUnit.Minutes:
-                    return _stopwatch.Elapsed.Minutes;
+                    return (long)_stopwatch.Elapsed.TotalMinutes;
                 case TimeUnit.Hours:
-                    return _stopwatch.Elapsed.Hours;
+                    return (long)_stopwatch.Elapsed.TotalHours;
                 case TimeUnit.Days:
-                    return _stopwatch.Elapsed.Days;
+                    return (long)_stopwatch.Elapsed.TotalDays;
                 default:
                     throw new TimeUnitNotSupportedException(_timeUnit);
             }
